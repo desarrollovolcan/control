@@ -153,12 +153,14 @@ include_once "../../assest/config/datosUrLP.php";
                                                         <th>Estado</th>
                                                         <th>Fecha Instructivo</th>
                                                         <th class="text-center">Operaciónes </th>
+                                                        <th class="text-center">Operaciónes </th>
                                                         <th>Estado Instructivo</th>
                                                         <th>Tipo Emarque</th>
                                                         <th>Fecha Corte Documental</th>
                                                         <th>Fecha ETD</th>
                                                         <th>Fecha ETA</th>
                                                         <th>Fecha Real ETA</th>
+                                                        <th>Fecha Real ETD</th>
                                                         <th>BL/AWB </th>
                                                         <th>Emisión BL </th>
                                                         <th>Naviera </th>
@@ -166,6 +168,7 @@ include_once "../../assest/config/datosUrLP.php";
                                                         <th>Viaje </th>
                                                         <th>Tipo Contenedor</th>
                                                         <th>N° Contenedor</th>
+                                                        <th>N° Courier</th>
                                                         <th>Días Estimados</th>
                                                         <th>Días Reales </th>
                                                         <th>Destino Final </th>
@@ -180,6 +183,7 @@ include_once "../../assest/config/datosUrLP.php";
                                                         <th>Semana Real ETA</th>
                                                         <th>Empresa</th>
                                                         <th>Temporada</th>
+                                                        <th>Otro</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -269,6 +273,9 @@ include_once "../../assest/config/datosUrLP.php";
                                                                 <?php  }  ?>
                                                             </td>
                                                             <td> <?php echo $r['FECHA']; ?> </td>
+                                                            <!-- <td>
+                                                                
+                                                            </td> -->
                                                             <td class="text-center">
                                                                 <form method="post" id="form1">
                                                                     <div class="list-icons d-inline-flex">
@@ -362,13 +369,42 @@ include_once "../../assest/config/datosUrLP.php";
                                                                         </div>
                                                                     </div>
                                                                 </form>
+                                                                <form method="post" id="form1">
+                                                                    <div class="list-icons d-inline-flex">
+                                                                        <input type="hidden" class="form-control" placeholder="ID" id="ID" name="ID" value="<?php echo $r['ID_ICARGA']; ?>" />
+                                                                        <input type="hidden" class="form-control" placeholder="URL" id="URL" name="URL" value="registroICarga" />
+                                                                        <input type="hidden" class="form-control" placeholder="URLO" id="URLO" name="URLO" value="listarICarga" />                                                            <td>
+                                                                        <span>
+                                                                            <button type="submit" name="DUPLICARURL" class="btn btn-block btn-success" title="DUPLICAR">
+                                                                                <i class="fa fa-copy"></i> Duplicar
+                                                                            </button>
+                                                                                                                                                                                                         
+                                                                        </span>
+
+                                                                    </div>
+                                                                    
+                                                               </form>
                                                             </td>
+                                                            <td>
+                                                                <form  method="post" id="form1">
+                                                                <div class="list-icons d-inline-flex">
+                                                                    <input type="hidden" class="form-control" placeholder="ID" id="ID" name="ID" value="<?php echo $r['ID_ICARGA']; ?>" />
+                                                                        <input type="hidden" class="form-control" placeholder="URL" id="URL" name="URL" value="registroICarga" />
+                                                                        <input type="hidden" class="form-control" placeholder="URLO" id="URLO" name="URLO" value="listarICarga" /> 
+                                                                        <button type="submit" class="btn btn-block btn-danger" id="ELIMINAR" name="ELIMINAR" data-toggle="tooltip" title="Eliminar Instructivo Carga" >
+                                                                                <i class="fa fa-copy "></i> Eliminar
+                                                                            </button>
+                                                                    </div>
+                                                                    </form>
+                                                            </td>
+                                    
                                                             <td> <?php echo $ESTADOICARGA; ?> </td>
                                                             <td> <?php echo $TEMBARQUE; ?> </td>
                                                             <td> <?php echo $r['FECHACORTEDOCUMENTAL']; ?> </td>
                                                             <td> <?php echo $r['FECHAETD']; ?> </td>
                                                             <td> <?php echo $r['FECHAETA']; ?> </td>
                                                             <td> <?php echo $r['FECHAETAREAL']; ?> </td>
+                                                            <td> <?php echo $r['FECHAETDREAL']; ?> </td>
                                                             <td> <?php echo $r['BLAWB']; ?> </td>
                                                             <td> <?php echo $NOMBREEMISIONBL; ?> </td>
                                                             <td> <?php echo $NOMBRENAVIERA; ?> </td>
@@ -376,6 +412,7 @@ include_once "../../assest/config/datosUrLP.php";
                                                             <td> <?php echo $r['NVIAJE_ICARGA']; ?> </td>
                                                             <td> <?php echo $NOMBRETCONTENEDOR; ?> </td>
                                                             <td> <?php echo $NUMEROCONTENEDOR; ?> </td>
+                                                            <td> <?php echo $r['NUMEROCOURIER_ICARGA']; ?> </td>
                                                             <td> <?php echo $r['ESTIMADO']; ?> </td>
                                                             <td> <?php echo $r['REAL']; ?> </td>
                                                             <td> <?php echo $NOMBRDFINAL; ?> </td>
@@ -475,6 +512,30 @@ include_once "../../assest/config/datosUrLP.php";
                 })
             </script>';
         }   
+        if (isset($_REQUEST['ELIMINAR'])) {
+            $IDELIMINAR = $_REQUEST['ID'];
+            $ICARGA->__SET('ID_ICARGA', $IDELIMINAR);
+            //LLAMADA AL METODO DE EDITAR DEL CONTROLADOR
+            $ICARGA_ADO->deshabilitar($ICARGA);
+
+            $AUSUARIO_ADO->agregarAusuario2("NULL",1, 3,"".$_SESSION["NOMBRE_USUARIO"].", Deshabilitar Detalle Instructivo Carga","fruta_icarga",$_REQUEST['ID'],$_SESSION["ID_USUARIO"],$_SESSION['ID_EMPRESA'],$_SESSION['ID_PLANTA'],$_SESSION['ID_TEMPORADA'] );
+
+            //REDIRECCIONAR A PAGINA listarICarga.php
+            $id_dato =  $_REQUEST['IDP'];
+            $accion_dato =  $_REQUEST['OPP'];
+            // echo "<script type='text/javascript'> location.href ='" . $_REQUEST['URLO'] . ".php?op';</script>";   
+            echo '<script>
+                Swal.fire({
+                    icon:"error",
+                    title:"Registro Eliminado",
+                    text:"El Instructivo de carga se ha eliminado correctamente ",
+                    showConfirmButton:true,
+                    confirmButtonText:"Volver al agrupado"
+                }).then((result)=>{
+                    location.href ="' . $_REQUEST['URLO'] . '.php?op&id='.$id_dato.'&a='.$accion_dato.'&urlo='.$urlo_dato.'&idd='.$idd_dato.'&ad='.$acciond_dato.'";                        
+                })
+            </script>'; 
+        }
         ?>
 </body>
 </html>
